@@ -19,4 +19,6 @@ make -j$NUM_CPU_CORES M=$PWD/drivers/bal && sudo make M=$PWD/drivers/bal modules
 sudo mkdir -p /lib/modules/`uname -r`/extra/
 sudo cp /lib/modules/$KERNELRELEASE/extra/bal.ko /lib/modules/$CURRENT_KERNEL_VERSION/extra/
 sudo depmod -a
+make dtbs
 
+sudo cp arch/arm/boot/dts/overlays/bal-overlay.dtb* /boot/overlays
