@@ -1,0 +1,36 @@
+// Example overlay for PCF8523 RTC device + ENC28J60 Ethernet
+/dts-v1/;
+/plugin/;
+
+/ {
+  compatible = "brcm,bcm2708";
+fragment@0 {
+		target = <&spi0>;
+		__overlay__ {
+			status = "okay";
+
+			spidev@0{
+				status = "disabled";
+			};
+
+		};
+	};
+
+  fragment@1 {
+    target = <&spi0>;
+    __overlay__ {
+      #address-cells = <1>; /* needed to avoid dtc warning */
+      #size-cells = <0>; /* needed to avoid dtc warning */
+      status = "okay";
+      bal@0 { 
+        compatible = "nxp,bal";
+        reg = <0>;
+        busy-pin-gpio = <&gpio 25 0>;
+        spi-max-frequency = <6000000>;
+        status = "okay";
+      };
+    };
+  };
+
+
+};
