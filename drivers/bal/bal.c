@@ -239,6 +239,7 @@ module_init(baldev_init);
 static void __exit baldev_exit(void)
 {
 	spi_unregister_driver(&bal_spi_driver);
+	class_destroy(baldev_class);
 	unregister_chrdev(BALDEV_MAJOR, BALDEV_NAME);
 }
 module_exit(baldev_exit);
