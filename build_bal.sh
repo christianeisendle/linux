@@ -1,16 +1,37 @@
 #!/bin/bash
 NUM_CPU_CORES=`/usr/bin/nproc`
 
-KERNEL=kernel7
-make -j$NUM_CPU_CORES bcm2709_defconfig
+
+if [ "$1" = "raspi1" ]; then
+    KERNEL=kernel
+    DEFCONFIG=bcmrpi_defconfig
+    MODULE_SYMVERS=Module.symvers
+elif [ "$1" = "raspi2" ]; then
+    KERNEL=kernel7
+    DEFCONFIG=bcm2709_defconfig
+    MODULE_SYMVERS=Module7.symvers
+else
+    echo "Usage: "
+    echo "     To build for Raspberry Pi1:"
+    echo -e
+    echo "       $0 raspi1"
+    echo -e
+    echo "     To build for Raspberry Pi2/3:"
+    echo -e
+    echo "       $0 raspi2"
+    echo -e
+    exit 1
+fi
+
+make -j$NUM_CPU_CORES $DEFCONFIG
 make -j$NUM_CPU_CORES modules_prepare
 
 KERNELRELEASE=`cat include/config/kernel.release`
 CURRENT_KERNEL_VERSION=`uname -r`
 CURRENT_KERNEL_SHORT_VERSION=`uname -r | sed -e "s/\([0-9]*.[0-9]*.[0-9]*\).*/\1/"`
 
-if [ -e symvers/Module7.symvers.$CURRENT_KERNEL_SHORT_VERSION ]; then
-	cp symvers/Module7.symvers.$CURRENT_KERNEL_SHORT_VERSION ./Module.symvers
+if [ -e symvers/$MODULE_SYMVERS.$CURRENT_KERNEL_SHORT_VERSION ]; then
+	cp symvers/$MODULE_SYMVERS.$CURRENT_KERNEL_SHORT_VERSION ./Module.symvers
 else
 	echo "Error: Module.symvers for current kernel ($CURRENT_KERNEL_SHORT_VERSION) not found. Check symvers/ folder for available versions or get the version for your kernel from https://github.com/raspberrypi/firmware/tree/master/extra"
 	exit 1
