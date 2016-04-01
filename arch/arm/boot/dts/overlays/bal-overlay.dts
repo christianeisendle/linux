@@ -1,4 +1,4 @@
-// Example overlay for PCF8523 RTC device + ENC28J60 Ethernet
+// Overlay for NxpRdLib BAL Kernel Module
 /dts-v1/;
 /plugin/;
 
@@ -22,7 +22,7 @@ fragment@0 {
       #address-cells = <1>; /* needed to avoid dtc warning */
       #size-cells = <0>; /* needed to avoid dtc warning */
       status = "okay";
-      bal@0 { 
+      bal: nxprdlib-bal@0 { 
         compatible = "nxp,bal";
         reg = <0>;
         busy-pin-gpio = <&gpio 25 0>;
@@ -31,6 +31,9 @@ fragment@0 {
       };
     };
   };
+  __overrides__ {
+        busy-pin-gpio = <&bal>, "busy-pin-gpio:4";
+    };
 
 
 };
