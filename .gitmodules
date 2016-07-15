@@ -1,0 +1,3 @@
+[submodule "bal"]
+	path = bal
+	url = https://github.com/christianeisendle/nxprdlib-kernel-bal.git
