@@ -44,4 +44,4 @@ sudo cp /lib/modules/$KERNELRELEASE/extra/bal.ko /lib/modules/$CURRENT_KERNEL_VE
 sudo depmod -a
 make dtbs
 
-sudo cp arch/arm/boot/dts/overlays/bal-overlay.dtb* /boot/overlays
+sudo cp arch/arm/boot/dts/overlays/bal.dtb* /boot/overlays
