@@ -514,7 +514,7 @@ static void fixup_phandle_references(struct check *c, struct node *dt,
 		}
 
 		/* if it's a local reference, we need to record it */
-		if (symbol_fixup_support) {
+		if (symbol_fixup_support && dt->is_plugin) {
 
 			/* allocate a new local fixup entry */
 			fe = xmalloc(sizeof(*fe));
@@ -523,6 +523,7 @@ static void fixup_phandle_references(struct check *c, struct node *dt,
 			fe->prop = prop;
 			fe->offset = m->offset;
 			fe->next = NULL;
+			fe->local_fixup_generated = false;
 
 			/* append it to the local fixups */
 			fep = &dt->local_fixups;

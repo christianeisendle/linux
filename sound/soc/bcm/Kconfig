@@ -50,12 +50,33 @@ config SND_BCM2708_SOC_RPI_PROTO
 	help
 	  Say Y or M if you want to add support for Audio Codec Board PROTO (WM8731).
 
+config SND_BCM2708_SOC_JUSTBOOM_DAC
+	tristate "Support for JustBoom DAC"
+	depends on SND_BCM2708_SOC_I2S || SND_BCM2835_SOC_I2S
+	select SND_SOC_PCM512x
+	help
+	  Say Y or M if you want to add support for JustBoom DAC.
+
+config SND_BCM2708_SOC_JUSTBOOM_DIGI
+	tristate "Support for JustBoom Digi"
+	depends on SND_BCM2708_SOC_I2S || SND_BCM2835_SOC_I2S
+	select SND_SOC_WM8804
+	help
+	  Say Y or M if you want to add support for JustBoom Digi.
+
 config SND_BCM2708_SOC_IQAUDIO_DAC
 	tristate "Support for IQaudIO-DAC"
 	depends on SND_BCM2708_SOC_I2S || SND_BCM2835_SOC_I2S
 	select SND_SOC_PCM512x_I2C
 	help
 	  Say Y or M if you want to add support for IQaudIO-DAC.
+
+config SND_BCM2708_SOC_IQAUDIO_DIGI
+        tristate "Support for IQAudIO Digi"
+        depends on SND_BCM2708_SOC_I2S || SND_BCM2835_SOC_I2S
+        select SND_SOC_WM8804
+        help
+         Say Y or M if you want to add support for IQAudIO Digital IO board.
 
 config SND_BCM2708_SOC_RASPIDAC3
 	tristate "Support for RaspiDAC Rev.3x"
@@ -64,3 +85,32 @@ config SND_BCM2708_SOC_RASPIDAC3
 	select SND_SOC_TPA6130A2
 	help
 	  Say Y or M if you want to add support for RaspiDAC Rev.3x.
+
+config SND_BCM2708_SOC_ADAU1977_ADC
+	tristate "Support for ADAU1977 ADC"
+	depends on SND_BCM2708_SOC_I2S || SND_BCM2835_SOC_I2S
+	select SND_SOC_ADAU1977_I2C
+	help
+	  Say Y or M if you want to add support for ADAU1977 ADC.
+
+config SND_AUDIOINJECTOR_PI_SOUNDCARD
+	tristate "Support for audioinjector.net Pi add on soundcard"
+	depends on SND_BCM2708_SOC_I2S || SND_BCM2835_SOC_I2S
+	select SND_SOC_WM8731
+	help
+	  Say Y or M if you want to add support for audioinjector.net Pi Hat
+
+config SND_DIGIDAC1_SOUNDCARD
+        tristate "Support for Red Rocks Audio DigiDAC1"
+        depends on SND_BCM2708_SOC_I2S || SND_BCM2835_SOC_I2S
+        select SND_SOC_WM8804
+        select SND_SOC_WM8741
+        help
+         Say Y or M if you want to add support for Red Rocks Audio DigiDAC1 board.
+
+config SND_BCM2708_SOC_DIONAUDIO_LOCO
+	tristate "Support for Dion Audio LOCO DAC-AMP"
+	depends on SND_BCM2708_SOC_I2S || SND_BCM2835_SOC_I2S
+	select SND_SOC_PCM5102a
+	help
+	  Say Y or M if you want to add support for Dion Audio LOCO.

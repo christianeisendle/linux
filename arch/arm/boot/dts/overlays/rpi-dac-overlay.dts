@@ -6,22 +6,13 @@
 	compatible = "brcm,bcm2708";
 
 	fragment@0 {
-		target = <&sound>;
-		__overlay__ {
-			compatible = "rpi,rpi-dac";
-			i2s-controller = <&i2s>;
-			status = "okay";
-		};
-	};
-
-	fragment@1 {
 		target = <&i2s>;
 		__overlay__ {
 			status = "okay";
 		};
 	};
 
-	fragment@2 {
+	fragment@1 {
 		target-path = "/";
 		__overlay__ {
 			pcm1794a-codec {
@@ -29,6 +20,15 @@
 				compatible = "ti,pcm1794a";
 				status = "okay";
 			};
+		};
+	};
+
+	fragment@2 {
+		target = <&sound>;
+		__overlay__ {
+			compatible = "rpi,rpi-dac";
+			i2s-controller = <&i2s>;
+			status = "okay";
 		};
 	};
 };

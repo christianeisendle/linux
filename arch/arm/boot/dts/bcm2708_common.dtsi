@@ -1,4 +1,7 @@
+#include "dt-bindings/clock/bcm2835.h"
 #include <dt-bindings/clock/bcm2835-aux.h>
+#include "dt-bindings/power/raspberrypi-power.h"
+#include "dt-bindings/gpio/gpio.h"
 #include "skeleton.dtsi"
 
 / {
@@ -34,17 +37,6 @@
 		clocks = &clocks;
 	};
 
-	/* Onboard audio */
-	audio: audio {
-		compatible = "brcm,bcm2835-audio";
-		brcm,pwm-channels = <8>;
-		status = "disabled";
-	};
-
-	/* External sound card */
-	sound: sound {
-	};
-
 	soc: soc {
 		compatible = "simple-bus";
 		#address-cells = <1>;
@@ -64,10 +56,32 @@
 				     <1 24>,
 				     <1 25>,
 				     <1 26>,
-				     <1 27>;
+				     /* dma channel 11-14 share one irq */
+				     <1 27>,
+				     <1 27>,
+				     <1 27>,
+				     <1 27>,
+				     /* unused shared irq for all channels */
+				     <1 28>;
+			interrupt-names = "dma0",
+					  "dma1",
+					  "dma2",
+					  "dma3",
+					  "dma4",
+					  "dma5",
+					  "dma6",
+					  "dma7",
+					  "dma8",
+					  "dma9",
+					  "dma10",
+					  "dma11",
+					  "dma12",
+					  "dma13",
+					  "dma14",
+					  "dma-shared-all";
 
 			#dma-cells = <1>;
-			brcm,dma-channel-mask = <0x0f35>;
+			brcm,dma-channel-mask = <0x7f34>;
 		};
 
 		intc: interrupt-controller@7e00b200 {
@@ -145,6 +159,7 @@
 
 		i2s: i2s@7e203000 {
 			compatible = "brcm,bcm2835-i2s";
+			#sound-dai-cells = <0>;
 			reg = <0x7e203000 0x24>,
 			      <0x7e101098 0x08>;
 
@@ -168,7 +183,7 @@
 			 * add more gpios if necessary as <&gpio 6 1>
 			 * (but do not forget to make them output!)
 			 */
-			cs-gpios = <0>, <0>;
+			cs-gpios = <&gpio 8 1>, <&gpio 7 1>;
 		};
 
 		i2c0: i2c@7e205000 {
@@ -178,6 +193,29 @@
 			clocks = <&clk_core>;
 			#address-cells = <1>;
 			#size-cells = <0>;
+			status = "disabled";
+		};
+
+		pixelvalve0: pixelvalve@7e206000 {
+			compatible = "brcm,bcm2835-pixelvalve0";
+			reg = <0x7e206000 0x100>;
+			status = "disabled";
+		};
+
+		dpi: dpi@7e208000 {
+			compatible = "brcm,bcm2835-dpi";
+			reg = <0x7e208000 0x8c>;
+			clocks = <&cprman BCM2835_CLOCK_VPU>,
+				 <&cprman BCM2835_CLOCK_DPI>;
+			clock-names = "core", "pixel";
+			#address-cells = <1>;
+			#size-cells = <0>;
+			status = "disabled";
+		};
+
+		pixelvalve1: pixelvalve@7e207000 {
+			compatible = "brcm,bcm2835-pixelvalve1";
+			reg = <0x7e207000 0x100>;
 			status = "disabled";
 		};
 
@@ -238,6 +276,12 @@
 			status = "disabled";
 		};
 
+		hvs: hvs@7e400000 {
+			compatible = "brcm,bcm2835-hvs";
+			reg = <0x7e400000 0x6000>;
+			status = "disabled";
+		};
+
 		i2c1: i2c@7e804000 {
 			compatible = "brcm,bcm2708-i2c";
 			reg = <0x7e804000 0x1000>;
@@ -272,6 +316,25 @@
 			status = "disabled";
 		};
 
+		pixelvalve2: pixelvalve@7e807000 {
+			compatible = "brcm,bcm2835-pixelvalve2";
+			reg = <0x7e807000 0x100>;
+			status = "disabled";
+		};
+
+		hdmi: hdmi@7e902000 {
+			compatible = "brcm,bcm2835-hdmi";
+			reg = <0x7e902000 0x600>,
+			      <0x7e808000 0x100>;
+			ddc = <&i2c2>;
+			hpd-gpios = <&gpio 46 GPIO_ACTIVE_HIGH>;
+			clocks = <&cprman BCM2835_PLLH_PIX>,
+				 <&cprman BCM2835_CLOCK_HSM>;
+			clock-names = "pixel", "hdmi";
+			power-domains = <&power RPI_POWER_DOMAIN_HDMI>;
+			status = "disabled";
+		};
+
 		usb: usb@7e980000 {
 			compatible = "brcm,bcm2708-usb";
 			reg = <0x7e980000 0x10000>,
@@ -280,9 +343,21 @@
 				     <1 9>;
 		};
 
+		v3d: v3d@7ec00000 {
+			compatible = "brcm,vc4-v3d";
+			reg = <0x7ec00000 0x1000>;
+			status = "disabled";
+		};
+
 		firmware: firmware {
 			compatible = "raspberrypi,bcm2835-firmware";
 			mboxes = <&mailbox>;
+		};
+
+		power: power {
+			compatible = "raspberrypi,bcm2835-power";
+			firmware = <&firmware>;
+			#power-domain-cells = <1>;
 		};
 
 		leds: leds {
@@ -306,6 +381,23 @@
 		thermal: thermal {
 			compatible = "brcm,bcm2835-thermal";
 			firmware = <&firmware>;
+		};
+
+		gpu: gpu {
+			compatible = "brcm,bcm2835-vc4";
+			status = "disabled";
+		};
+
+		/* Onboard audio */
+		audio: audio {
+			compatible = "brcm,bcm2835-audio";
+			brcm,pwm-channels = <8>;
+			status = "disabled";
+		};
+
+		/* External sound card */
+		sound: sound {
+			status = "disabled";
 		};
 	};
 
