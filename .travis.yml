@@ -6,9 +6,9 @@ before_install:
 script:
   - mkdir toolchain
   - pushd toolchain
-  - git clone https://github.com/raspberrypi/tools
-  - export PATH=$pwd/tools/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian/bin:$PATH
+  - git clone --depth=1 https://github.com/raspberrypi/tools
+  - export PATH=$PWD/tools/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian/bin:$PATH
   - popd
-  - export KERNEL=kernel7
+  - export ARCH=arm
   - export CROSS_COMPILE=arm-linux-gnueabihf-
   - ./build_bal.sh raspi2 do_not_copy
