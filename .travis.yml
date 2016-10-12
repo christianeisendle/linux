@@ -7,8 +7,7 @@ script:
   - mkdir toolchain
   - pushd toolchain
   - git clone https://github.com/raspberrypi/tools
-  - export PATH=$PWD/tools/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian/bin:$PATH
-  - find . -name "arm-linux-gnueabihf-*"
+  - export PATH=`pwd`/tools/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian/bin/:$PATH
   - popd
   - export ARCH=arm
   - export CROSS_COMPILE=arm-linux-gnueabihf-
