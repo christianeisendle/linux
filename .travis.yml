@@ -1,9 +1,4 @@
 language: c
-
-before_script:
-  - mkdir toolchain
-  - git clone https://github.com/raspberrypi/tools
-  - 
   
 script:
   - mkdir toolchain
