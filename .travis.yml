@@ -1,0 +1,3 @@
+language: c
+script:
+  - ./build_bal.sh raspi1
