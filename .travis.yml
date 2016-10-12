@@ -1,11 +1,13 @@
 language: c
 
 before_script:
-  - sudo sh -c "echo 'foreign-architecture armhf' >> /etc/dpkg/dpkg.cfg.d/multiarch"
-  - curl http://emdebian.org/tools/debian/emdebian-toolchain-archive.key | sudo apt-key add -
-  - echo "deb http://emdebian.org/tools/debian/ jessie main" | sudo tee -a /etc/apt/sources.list
-  - sudo apt-get -qq update
-  - sudo apt-get -y install crossbuild-essential-armhf
+  - mkdir toolchain
+  - git clone https://github.com/raspberrypi/tools
+  - 
   
 script:
-  - ./build_bal.sh raspi1
+  - mkdir toolchain
+  - git clone https://github.com/raspberrypi/tools
+  - export PATH=$pwd/toolchain/tools/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian/bin:$PATH
+  - export KERNEL=kernel7
+  - make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- bcm2709_defconfig
