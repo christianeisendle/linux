@@ -1,5 +1,8 @@
 language: c
-  
+before_install:
+  - sudo apt-get -qq update
+  - sudo apt-get -y install bc
+
 script:
   - mkdir toolchain
   - pushd toolchain
@@ -7,4 +10,5 @@ script:
   - export PATH=$pwd/tools/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian/bin:$PATH
   - popd
   - export KERNEL=kernel7
-  - make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- bcm2709_defconfig
+  - export CROSS_COMPILE=arm-linux-gnueabihf-
+  - ./build_bal.sh raspi2 do_not_copy
