@@ -37,7 +37,7 @@ else
 	exit 1
 fi
 make -j$NUM_CPU_CORES M=$PWD/drivers/bal && sudo make M=$PWD/drivers/bal modules_install
-
+if [ -z ${2} ]; then
 # copy also to current kernel dir
 sudo mkdir -p /lib/modules/`uname -r`/extra/
 sudo cp /lib/modules/$KERNELRELEASE/extra/bal.ko /lib/modules/$CURRENT_KERNEL_VERSION/extra/
@@ -45,3 +45,4 @@ sudo depmod -a
 make dtbs
 
 sudo cp arch/arm/boot/dts/overlays/bal.dtb* /boot/overlays
+fi
