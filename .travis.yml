@@ -7,8 +7,7 @@ script:
   - mkdir toolchain
   - pushd toolchain
   - git clone --depth=1 https://github.com/raspberrypi/tools
-  - export PATH=$PWD/tools/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian/bin:$PATH
   - popd
   - export ARCH=arm
-  - export CROSS_COMPILE=arm-linux-gnueabihf-
+  - export CROSS_COMPILE=$PWD/toolchain/tools/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian/bin/arm-linux-gnueabihf-
   - ./build_bal.sh raspi2 do_not_copy
