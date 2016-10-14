@@ -39,8 +39,9 @@ else
 	echo "Error: Module.symvers for current kernel ($CURRENT_KERNEL_SHORT_VERSION) not found. Check symvers/ folder for available versions or get the version for your kernel from https://github.com/raspberrypi/firmware/tree/master/extra"
 	exit 1
 fi
-make -j$NUM_CPU_CORES M=$PWD/drivers/bal && sudo make M=$PWD/drivers/bal modules_install
+make -j$NUM_CPU_CORES M=$PWD/drivers/bal
 if [ -z "$CROSS_COMPILE" ]; then
+    sudo make M=$PWD/drivers/bal modules_install
     # copy also to current kernel dir
     sudo mkdir -p /lib/modules/$CURRENT_KERNEL_VERSION/extra/
     sudo cp /lib/modules/$KERNELRELEASE/extra/bal.ko /lib/modules/$CURRENT_KERNEL_VERSION/extra/
