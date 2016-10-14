@@ -27,9 +27,12 @@ make -j$NUM_CPU_CORES $DEFCONFIG
 make -j$NUM_CPU_CORES modules_prepare
 
 KERNELRELEASE=`cat include/config/kernel.release`
-CURRENT_KERNEL_VERSION=`uname -r`
-CURRENT_KERNEL_SHORT_VERSION=`uname -r | sed -e "s/\([0-9]*.[0-9]*.[0-9]*\).*/\1/"`
-
+if [ -z "$CROSS_COMPILE" ]; then
+    CURRENT_KERNEL_VERSION=`uname -r`
+else
+    CURRENT_KERNEL_VERSION=$KERNELRELEASE
+fi
+CURRENT_KERNEL_SHORT_VERSION=`echo $CURRENT_KERNEL_VERSION | sed -e "s/\([0-9]*.[0-9]*.[0-9]*\).*/\1/"`
 if [ -e symvers/$MODULE_SYMVERS.$CURRENT_KERNEL_SHORT_VERSION ]; then
 	cp symvers/$MODULE_SYMVERS.$CURRENT_KERNEL_SHORT_VERSION ./Module.symvers
 else
@@ -37,12 +40,12 @@ else
 	exit 1
 fi
 make -j$NUM_CPU_CORES M=$PWD/drivers/bal && sudo make M=$PWD/drivers/bal modules_install
-if [ -z ${2} ]; then
-# copy also to current kernel dir
-sudo mkdir -p /lib/modules/`uname -r`/extra/
-sudo cp /lib/modules/$KERNELRELEASE/extra/bal.ko /lib/modules/$CURRENT_KERNEL_VERSION/extra/
-sudo depmod -a
-make dtbs
+if [ -z "$CROSS_COMPILE" ]
+    # copy also to current kernel dir
+    sudo mkdir -p /lib/modules/$CURRENT_KERNEL_VERSION/extra/
+    sudo cp /lib/modules/$KERNELRELEASE/extra/bal.ko /lib/modules/$CURRENT_KERNEL_VERSION/extra/
+    sudo depmod -a
+    make dtbs
 
-sudo cp arch/arm/boot/dts/overlays/bal.dtb* /boot/overlays
+    sudo cp arch/arm/boot/dts/overlays/bal.dtb* /boot/overlays
 fi
