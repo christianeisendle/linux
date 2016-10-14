@@ -40,7 +40,7 @@ else
 	exit 1
 fi
 make -j$NUM_CPU_CORES M=$PWD/drivers/bal && sudo make M=$PWD/drivers/bal modules_install
-if [ -z "$CROSS_COMPILE" ]
+if [ -z "$CROSS_COMPILE" ]; then
     # copy also to current kernel dir
     sudo mkdir -p /lib/modules/$CURRENT_KERNEL_VERSION/extra/
     sudo cp /lib/modules/$KERNELRELEASE/extra/bal.ko /lib/modules/$CURRENT_KERNEL_VERSION/extra/
