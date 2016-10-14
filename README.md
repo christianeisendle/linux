@@ -1,5 +1,7 @@
 # NXP NFCRdlib Kernel BAL Module for Raspberry pi
 
+[![Build Status](https://travis-ci.org/christianeisendle/linux.svg?branch=rpi-4.4.y_bal)](https://travis-ci.org/christianeisendle/linux)
+
 ## General
 This is an out-of-the-box working example of nxprdlib-kernel-bal project for raspberry pi 1/2/3. 
 For more information on nxprdlib-kernel-bal refer to https://github.com/christianeisendle/nxprdlib-kernel-bal
